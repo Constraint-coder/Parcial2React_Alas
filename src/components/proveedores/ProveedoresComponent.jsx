@@ -1,18 +1,22 @@
 import React, { useRef } from 'react';
 
-export function CategoriaComponent({ item, onEditar, onEliminar }) {
-  const cardRef    = useRef(null);
-  const itemActual = useRef(item); // ✅ copia mutable
+export function ProveedoresComponent({ item, onEditar, onEliminar }) {
+  const cardRef = useRef(null);
+  const itemActual = useRef(item); // 
 
   function mostrarFormulario() {
     const card = cardRef.current;
-    const data = itemActual.current; // ✅ datos más recientes
+    const data = itemActual.current; 
 
     card.innerHTML = `
-      <div class="title">Editar Categoría</div>
+      <div class="title">Editar Proveedor</div>
       <div class="form-group">
         <label>Nombre</label>
         <input type="text" id="input-nombre-${data.id}" value="${data.nombre.trim()}" />
+      </div>
+      <div class="form-group">
+        <label>Teléfono</label>
+        <input type="text" id="input-telefono-${data.id}" value="${data.telefono ?? ''}" />
       </div>
       <div class="form-group">
         <label>Estado</label>
@@ -28,11 +32,12 @@ export function CategoriaComponent({ item, onEditar, onEliminar }) {
     `;
 
     document.getElementById(`btn-guardar-${data.id}`).addEventListener('click', () => {
-      const nombre = document.getElementById(`input-nombre-${data.id}`).value;
-      const estado = document.getElementById(`input-estado-${data.id}`).value === 'true';
+      const nombre   = document.getElementById(`input-nombre-${data.id}`).value;
+      const telefono = document.getElementById(`input-telefono-${data.id}`).value;
+      const estado   = document.getElementById(`input-estado-${data.id}`).value === 'true';
 
-      const nuevoDato = { nombre, estado };
-      itemActual.current = { ...itemActual.current, ...nuevoDato }; // ✅ actualiza copia local
+      const nuevoDato = { nombre, telefono, estado };
+      itemActual.current = { ...itemActual.current, ...nuevoDato };
       onEditar(data.id, nuevoDato);
       restaurarVista();
     });
@@ -44,10 +49,11 @@ export function CategoriaComponent({ item, onEditar, onEliminar }) {
 
   function restaurarVista() {
     const card = cardRef.current;
-    const data = itemActual.current; // ✅ datos actualizados
+    const data = itemActual.current;
 
     card.innerHTML = `
       <div class="title">${data.nombre.trim()}</div>
+      <div class="item">telefono: ${data.telefono ?? 'Sin teléfono'}</div>
       <div class="item">${data.estado ? 'Activo' : 'Inactivo'}</div>
       <div class="bontonera">
         <button class="editar"   id="btn-editar-${data.id}">Editar</button>
@@ -64,6 +70,7 @@ export function CategoriaComponent({ item, onEditar, onEliminar }) {
   return (
     <div className='card shadow-xs' id={item.id} ref={cardRef}>
       <div className='title'>{item.nombre.trim()}</div>
+      <div className='item'>{item.telefono ?? 'Sin teléfono'}</div>
       <div className='item'>{item.estado ? 'Activo' : 'Inactivo'}</div>
       <div className='bontonera'>
         <button className='editar'   onClick={mostrarFormulario}>Editar</button>

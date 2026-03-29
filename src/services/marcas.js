@@ -1,76 +1,74 @@
-const url = process.env.VITE_URL;
+const url = 'http://localhost:8000'
 
 const marcas = async()=>{
     try {
-        const response = await fetch(url+'/marcas')
-      const data = await response.json() 
-      return data.data
-
-      return data.data
+        const res = await fetch(url+'/api/marcas');
+        const data = await res.json();
+        return data;
     } catch (error) {
         console.log(error.message)
     }
+}
+
+// 🔹 POST
+const crearMarcas = async (data) => {
+  try {
+    const response = await fetch(url+'/api/marcas', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    return await response.json();
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
-
-
-const crearMarcas = async(data)=>{
-    try {
-        const response = await fetch(url+'/marcas',{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        const res = await response.json() 
-        return res.data
-    } catch (error) {
-        console.log(error.message)
-    }
-};
-
+// 🔹 PUT
 const editarMarcas = async (data, id) => {
-    try {
-        const response = await fetch(`${url}/marcas/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
+  try {
+    const fullUrl = url+'/api/marcas/'+id;
+    console.log('URL:', fullUrl);       
+    console.log('Data:', data);       
 
-        const res = await response.json();
-        return res.data;
+    const response = await fetch(fullUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
 
-    } catch (error) {
-        console.log(error.message);
+    console.log('Status:', response.status);
+
+    if (!response.ok) {
+      const text = await response.text(); 
+      console.log('Respuesta del servidor:', text);
+      throw new Error(`Error ${response.status}`);
     }
+
+    
+  } catch (error) {
+    console.log(error.message);
+  }
 };
-
-const eliminarMarcas = async (data, id) => {
-    try {
-        const response = await fetch(`${url}/marcas/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-        const res = await response.json();
-        return res.data;
-
-    } catch (error) {
-        console.log(error.message);
-    }
+// 
+const eliminarMarcas = async (id) => {
+  try {
+    const response = await fetch(url+'/api/marcas/'+id, { 
+      method: 'DELETE' 
+    });
+    return await response.json();
+  } catch (error) {
+    console.log(error.message);
+  }
 };
-
 
 export {
   marcas,
   crearMarcas,
   editarMarcas,
   eliminarMarcas
-  
-}
+};

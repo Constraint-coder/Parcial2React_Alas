@@ -1,19 +1,21 @@
 const url = 'http://localhost:8000'
 
-const categorias = async()=>{
+const productos = async()=>{
     try {
-        const res = await fetch(url+'/api/categorias');
+        const res = await fetch(url+'/api/productos');
         const data = await res.json();
+                console.log(data)
         return data;
+
     } catch (error) {
         console.log(error.message)
     }
 }
 
 // 🔹 POST
-const crearCategorias = async (data) => {
+const crearProductos = async (data) => {
   try {
-    const response = await fetch(url+'/api/categorias', {
+    const response = await fetch(url+'/api/productos', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -27,10 +29,11 @@ const crearCategorias = async (data) => {
 };
 
 // 🔹 PUT
-const editarCategorias = async (data, id) => {
+const editarProductos = async (data, id) => {
   try {
-    const fullUrl = url+'/api/categorias/'+ id;
-
+    const fullUrl = url+'/api/productos/'+id;
+    console.log('URL:', fullUrl);       
+    console.log('Data:', data);       
 
     const response = await fetch(fullUrl, {
       method: 'PUT',
@@ -48,16 +51,16 @@ const editarCategorias = async (data, id) => {
       throw new Error(`Error ${response.status}`);
     }
 
-    return await response.json();
+    
   } catch (error) {
     console.log(error.message);
   }
 };
-
-const eliminarCategorias = async (id) => {
+// 
+const eliminarProductos = async (id) => {
   try {
-    const response = await fetch(url+'/api/categorias/'+id, { 
-      method: 'DELETE' // ✅ método correcto
+    const response = await fetch(url+'/api/productos/'+id, { 
+      method: 'DELETE' 
     });
     return await response.json();
   } catch (error) {
@@ -66,8 +69,8 @@ const eliminarCategorias = async (id) => {
 };
 
 export {
-  categorias,
-  crearCategorias,
-  editarCategorias,
-  eliminarCategorias
+  productos,
+  crearProductos,
+  editarProductos,
+  eliminarProductos
 };
